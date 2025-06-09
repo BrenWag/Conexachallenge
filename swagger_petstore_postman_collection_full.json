@@ -1,0 +1,315 @@
+{
+  "info": {
+    "name": "Swagger Petstore - QA Lead Challenge",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "POST /pet",
+      "item": [
+        {
+          "name": "POST - Crear mascota (positivo)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "https://petstore.swagger.io/v2/pet",
+              "host": [
+                "https://petstore.swagger.io"
+              ],
+              "path": [
+                "v2",
+                "pet"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"id\": 123456, \"name\": \"BrendaDog\", \"status\": \"available\"}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 o 201', () => pm.response.code === 200 || pm.response.code === 201);",
+                  "pm.test('Tiene ID', () => pm.response.json().id !== undefined);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "POST - Crear mascota (negativo, sin nombre)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "https://petstore.swagger.io/v2/pet",
+              "host": [
+                "https://petstore.swagger.io"
+              ],
+              "path": [
+                "v2",
+                "pet"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"id\": 123457, \"status\": \"available\"}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Debe fallar', () => pm.response.code !== 200);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "GET /pet/{petId}",
+      "item": [
+        {
+          "name": "GET - Obtener mascota existente",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "https://petstore.swagger.io/v2/pet/123456",
+              "host": [
+                "https://petstore.swagger.io"
+              ],
+              "path": [
+                "v2",
+                "pet",
+                "123456"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.code === 200);",
+                  "pm.test('El nombre es BrendaDog', () => pm.response.json().name === 'BrendaDog');"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET - Mascota inexistente",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "https://petstore.swagger.io/v2/pet/999999999",
+              "host": [
+                "https://petstore.swagger.io"
+              ],
+              "path": [
+                "v2",
+                "pet",
+                "999999999"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 404', () => pm.response.code === 404);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "PUT /pet",
+      "item": [
+        {
+          "name": "PUT - Actualizar mascota existente",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "https://petstore.swagger.io/v2/pet",
+              "host": [
+                "https://petstore.swagger.io"
+              ],
+              "path": [
+                "v2",
+                "pet"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"id\": 123456, \"name\": \"BrendaDog\", \"status\": \"sold\"}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.code === 200);",
+                  "pm.test('Status actualizado', () => pm.response.json().status === 'sold');"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "PUT - Mascota inv\u00e1lida (sin nombre)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "https://petstore.swagger.io/v2/pet",
+              "host": [
+                "https://petstore.swagger.io"
+              ],
+              "path": [
+                "v2",
+                "pet"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"id\": 123457, \"status\": \"pending\"}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Debe fallar o devolver error de validaci\u00f3n', () => pm.response.code !== 200);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "DELETE /pet/{petId}",
+      "item": [
+        {
+          "name": "DELETE - Mascota existente",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "https://petstore.swagger.io/v2/pet/123456",
+              "host": [
+                "https://petstore.swagger.io"
+              ],
+              "path": [
+                "v2",
+                "pet",
+                "123456"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.code === 200);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "DELETE - Mascota inexistente",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "https://petstore.swagger.io/v2/pet/999999999",
+              "host": [
+                "https://petstore.swagger.io"
+              ],
+              "path": [
+                "v2",
+                "pet",
+                "999999999"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 404', () => pm.response.code === 404);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
